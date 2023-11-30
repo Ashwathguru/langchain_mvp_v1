@@ -102,7 +102,7 @@ def main():
                 f.write(response)
 
             # Provide a download button for the transcript
-            st.download_button("Download Response", transcript_text)
+            st.download_button("Download Response", response)
 
 if __name__ == "__main__":
     # Set up the working directory
