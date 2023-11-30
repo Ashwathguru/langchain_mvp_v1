@@ -115,6 +115,18 @@ def main():
             # Save the transcript to a text file
             with open("response.txt", "w") as f:
                 f.write(response)
+            
+            tts_button = Button(label="Talk to me", width=100)
+
+            tts_button.js_on_event("button_click", CustomJS(code=f"""
+                                    var u = new SpeechSynthesisUtterance();
+                                    u.text = "{response}";
+                                    u.lang = 'en-US';
+
+                                    speechSynthesis.speak(u);
+                                    """))
+
+            st.bokeh_chart(tts_button)
 
             # Provide a download button for the transcript
             st.download_button("Download Response", response)
