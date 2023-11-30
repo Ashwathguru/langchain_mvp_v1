@@ -126,7 +126,7 @@ def main():
                                     speechSynthesis.speak(u);
                                     """))
 
-            st.write(tts_button)
+            st.bokeh_chart(tts_button)
 
             # Provide a download button for the transcript
             st.download_button("Download Response", response)
