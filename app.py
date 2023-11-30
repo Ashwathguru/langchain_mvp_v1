@@ -7,10 +7,8 @@ from audio_recorder_streamlit import audio_recorder
 from langchain.agents import create_csv_agent
 from langchain.llms import OpenAI
 
-from gtts import gTTS
-from io import BytesIO
-from pydub import AudioSegment
-import base64
+from bokeh.models.widgets import Button
+from bokeh.models import CustomJS
 
 # import API key from .env file
 openai.api_key = st.secrets["OPENAI_API_KEY"]
@@ -55,15 +53,7 @@ def transcribe_audio(file_path):
 
     return transcript["text"]
 
-def text_to_speech(text, lang='en'):
-    tts = gTTS(text=text, lang=lang, slow=False)
-    audio_stream = BytesIO()
-    tts.write_to_fp(audio_stream)
-    audio_stream.seek(0)
-    return audio_stream
 
-def play_audio(audio_stream):
-    st.audio(audio_stream, format='audio/wav')
 
 def main():
     """
@@ -97,14 +87,17 @@ def main():
             response=get_answer_csv(query)
             st.write(response)
 
-            if st.button("Convert and Play"):
-                if response:
-                    st.info("Converting text to speech...")
-                    # Convert text to speech
-                    audio_stream = text_to_speech(response, "en")
-                    # Play the audio
-                    play_audio(audio_stream)
+            tts_button = Button(label="Talk to me", width=100)
 
+            tts_button.js_on_event("button_click", CustomJS(code=f"""
+                                    var u = new SpeechSynthesisUtterance();
+                                    u.text = "{response}";
+                                    u.lang = 'en-US';
+
+                                    speechSynthesis.speak(u);
+                                    """))
+
+            st.bokeh_chart(tts_button)
             # Save the transcript to a text file
             with open("response.txt", "w") as f:
                 f.write(response)

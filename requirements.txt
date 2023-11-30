@@ -5,5 +5,4 @@ langchain==0.0.316
 tiktoken==0.5.1
 black==23.3.0
 tabulate==0.9.0
-gTTS==2.4.0
-pydub==0.25.1
+bokeh==2.4.3
