@@ -79,6 +79,7 @@ def main():
             # Display the transcript
             st.header("Transcript")
             st.write(transcript_text)
+            query=transcript_text
             response=get_answer_csv(query)
             st.write(response)
 
